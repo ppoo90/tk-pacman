@@ -74,23 +74,6 @@ class PacmanGame(GameApp):
         pass
 
     def on_key_pressed(self, event):
-        # if event.char.upper() == 'A':
-        #     self.pacman1.set_next_direction(DIR_LEFT)
-        # elif event.char.upper() == 'W':
-        #     self.pacman1.set_next_direction(DIR_UP)
-        # elif event.char.upper() == 'S':
-        #     self.pacman1.set_next_direction(DIR_DOWN)
-        # elif event.char.upper() == 'D':
-        #     self.pacman1.set_next_direction(DIR_RIGHT)
-        #
-        # if event.char.upper() == 'J':
-        #     self.pacman2.set_next_direction(DIR_LEFT)
-        # elif event.char.upper() == 'I':
-        #     self.pacman2.set_next_direction(DIR_UP)
-        # elif event.char.upper() == 'K':
-        #     self.pacman2.set_next_direction(DIR_DOWN)
-        # elif event.char.upper() == 'L':
-        #     self.pacman2.set_next_direction(DIR_RIGHT)
         ch = event.char.upper()
 
         if ch in self.command_map:
