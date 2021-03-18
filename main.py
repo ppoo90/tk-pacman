@@ -64,6 +64,17 @@ class PacmanGame(GameApp):
 
         self.elements.append(self.pacman1)
         self.elements.append(self.pacman2)
+        self.command_map = {
+            'W': self.get_pacman_next_direction_function(self.pacman1, DIR_UP),
+            'S': self.get_pacman_next_direction_function(self.pacman1, DIR_DOWN),
+            'D' : self.get_pacman_next_direction_function(self.pacman1, DIR_RIGHT),
+            'A': self.get_pacman_next_direction_function(self.pacman1, DIR_LEFT),
+            'J': self.get_pacman_next_direction_function(self.pacman2, DIR_LEFT),
+            'I': self.get_pacman_next_direction_function(self.pacman2, DIR_UP),
+            'K': self.get_pacman_next_direction_function(self.pacman2, DIR_DOWN),
+            'L': self.get_pacman_next_direction_function(self.pacman2, DIR_RIGHT),
+
+        }
 
     def update_scores(self):
         self.pacman1_score_text.set_text(f'P1: {self.pacman1_score}')
@@ -84,23 +95,16 @@ class PacmanGame(GameApp):
         pass
 
     def on_key_pressed(self, event):
-        if event.char.upper() == 'A':
-            self.pacman1.set_next_direction(DIR_LEFT)
-        elif event.char.upper() == 'W':
-            self.pacman1.set_next_direction(DIR_UP)
-        elif event.char.upper() == 'S':
-            self.pacman1.set_next_direction(DIR_DOWN)
-        elif event.char.upper() == 'D':
-            self.pacman1.set_next_direction(DIR_RIGHT)
+        ch = event.char.upper()
 
-        if event.char.upper() == 'J':
-            self.pacman2.set_next_direction(DIR_LEFT)
-        elif event.char.upper() == 'I':
-            self.pacman2.set_next_direction(DIR_UP)
-        elif event.char.upper() == 'K':
-            self.pacman2.set_next_direction(DIR_DOWN)
-        elif event.char.upper() == 'L':
-            self.pacman2.set_next_direction(DIR_RIGHT)
+        if ch in self.command_map:
+            return self.command_map[ch]()
+
+    def get_pacman_next_direction_function(self, pacman, next_direction):
+        def f():
+            pacman.set_next_direction(next_direction)
+
+        return f
 
 if __name__ == "__main__":
     root = tk.Tk()
