@@ -96,7 +96,7 @@ class Maze:
             return False
 
     def eat_dot_at(self, r, c):
-        dot = self.dots[(r,c)]
+        dot = self.dots[(r, c)]
         dot.get_eaten()
 
         self.has_active_dots[(r,c)] = False
