@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import random
 from gamelib import Sprite, GameApp, Text
 
 from dir_consts import *
@@ -24,20 +24,41 @@ class Pacman(Sprite):
         x, y = maze.piece_center(r,c)
         super().__init__(app, 'images/pacman.png', x, y)
 
+        self.is_super_speed = False
+        self.super_speed_counter = 0
+        self.state = NormalPacmanState(self)
+
     def update(self):
         if self.maze.is_at_center(self.x, self.y):
             r, c = self.maze.xy_to_rc(self.x, self.y)
 
             if self.maze.has_dot_at(r, c):
                 self.maze.eat_dot_at(r, c)
-            
+
+                self.state.random_upgrade()
+
+                if random.random() < 0.1:
+                    if not self.is_super_speed:
+                        self.is_super_speed = True
+                        self.super_speed_counter = 0
+
             if self.maze.is_movable_direction(r, c, self.next_direction):
                 self.direction = self.next_direction
             else:
                 self.direction = DIR_STILL
 
-        self.x += PACMAN_SPEED * DIR_OFFSET[self.direction][0]
-        self.y += PACMAN_SPEED * DIR_OFFSET[self.direction][1]
+        self.state.move_pacman()
+
+        if self.is_super_speed:
+            speed = 2 * PACMAN_SPEED
+            self.super_speed_counter += 1
+            if self.super_speed_counter > 50:
+                self.is_super_speed = False
+        else:
+            speed = PACMAN_SPEED
+
+        self.x += speed * DIR_OFFSET[self.direction][0]
+        self.y += speed * DIR_OFFSET[self.direction][1]
 
     def set_next_direction(self, direction):
         self.next_direction = direction
@@ -84,6 +105,35 @@ class PacmanGame(GameApp):
             pacman.set_next_direction(next_direction)
 
         return f
+
+class NormalPacmanState:
+    def __init__(self, pacman):
+        self.pacman = pacman
+
+
+    def random_upgrade(self):
+        if random.random() < 0.1:
+            self.pacman.state = SuperPacmanState(self.pacman)
+
+    def move_pacman(self):
+        # TODO:
+        #   - update the pacman's location with normal speed
+       pass
+
+
+class SuperPacmanState:
+    def __init__(self, pacman):
+        self.pacman = pacman
+        self.counter = 0
+
+    def random_upgrade(self):
+        pass
+
+    def move_pacman(self):
+        # TODO:
+        #   - update the pacman's location with super speed
+        #   - update the counter, if the counter >= 50, set state back to NormalPacmanState
+        pass
 
 if __name__ == "__main__":
     root = tk.Tk()
