@@ -12,6 +12,7 @@ UPDATE_DELAY = 33
 
 PACMAN_SPEED = 5
 
+
 class Pacman(Sprite):
     def __init__(self, app, maze, r, c):
         self.r = r
