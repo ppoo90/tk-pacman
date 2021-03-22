@@ -22,7 +22,7 @@ class Pacman(Sprite):
         self.direction = DIR_STILL
         self.next_direction = DIR_STILL
 
-        x, y = maze.piece_center(r,c)
+        x, y = maze.piece_center(r, c)
         super().__init__(app, 'images/pacman.png', x, y)
 
         self.dot_eaten_observers = []
@@ -37,10 +37,8 @@ class Pacman(Sprite):
             if self.maze.has_dot_at(r, c):
                 self.maze.eat_dot_at(r, c)
                 self.dot_eaten_observers[0]()
-                # self.dot_eaten_by_pacman()
-
+                
                 self.state.random_upgrade()
-
 
             if self.maze.is_movable_direction(r, c, self.next_direction):
                 self.direction = self.next_direction
@@ -48,10 +46,7 @@ class Pacman(Sprite):
                 self.direction = DIR_STILL
 
         self.state.move_pacman()
-
-
-
-
+        
     def set_next_direction(self, direction):
         self.next_direction = direction
 
@@ -76,7 +71,7 @@ class PacmanGame(GameApp):
         self.command_map = {
             'W': self.get_pacman_next_direction_function(self.pacman1, DIR_UP),
             'S': self.get_pacman_next_direction_function(self.pacman1, DIR_DOWN),
-            'D' : self.get_pacman_next_direction_function(self.pacman1, DIR_RIGHT),
+            'D': self.get_pacman_next_direction_function(self.pacman1, DIR_RIGHT),
             'A': self.get_pacman_next_direction_function(self.pacman1, DIR_LEFT),
             'J': self.get_pacman_next_direction_function(self.pacman2, DIR_LEFT),
             'I': self.get_pacman_next_direction_function(self.pacman2, DIR_UP),
@@ -115,10 +110,10 @@ class PacmanGame(GameApp):
 
         return f
 
+
 class NormalPacmanState:
     def __init__(self, pacman):
         self.pacman = pacman
-
 
     def random_upgrade(self):
         if random.random() < 0.1:
@@ -128,8 +123,9 @@ class NormalPacmanState:
         # TODO:
         #   - update the pacman's location with normal speed
         pacman = self.pacman
-        pacman.x += PACMAN_SPEED * DIR_OFFSET[pacman.direction][0]
-        pacman.y += PACMAN_SPEED * DIR_OFFSET[pacman.direction][1]
+        speed = PACMAN_SPEED
+        pacman.x += speed * DIR_OFFSET[pacman.direction][0]
+        pacman.y += speed * DIR_OFFSET[pacman.direction][1]
 
 
 class SuperPacmanState:
@@ -139,21 +135,25 @@ class SuperPacmanState:
 
     def random_upgrade(self):
         pacman = self.pacman
+ 
+        self.counter += 1
         if self.counter > 50:
             pacman.state = NormalPacmanState(self.pacman)
-        self.counter += 1
+       
+        
     def move_pacman(self):
         # TODO:
         #   - update the pacman's location with super speed
         #   - update the counter, if the counter >= 50, set state back to NormalPacmanState
         pacman = self.pacman
-        pacman.x += (PACMAN_SPEED * DIR_OFFSET[pacman.direction][0]) * 2
-        pacman.y += (PACMAN_SPEED * DIR_OFFSET[pacman.direction][1]) * 2
+        speed = 2 * PACMAN_SPEED
+        pacman.x += (speed * DIR_OFFSET[pacman.direction][0])
+        pacman.y += (speed * DIR_OFFSET[pacman.direction][1])
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Monkey Banana Game")
- 
+
     # do not allow window resizing
     root.resizable(False, False)
     app = PacmanGame(root, CANVAS_WIDTH, CANVAS_HEIGHT, UPDATE_DELAY)
