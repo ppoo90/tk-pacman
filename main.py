@@ -37,8 +37,7 @@ class Pacman(Sprite):
             if self.maze.has_dot_at(r, c):
                 self.maze.eat_dot_at(r, c)
                 self.dot_eaten_observers[0]()
-
-
+                
                 self.state.random_upgrade()
 
             if self.maze.is_movable_direction(r, c, self.next_direction):
@@ -47,7 +46,7 @@ class Pacman(Sprite):
                 self.direction = DIR_STILL
 
         self.state.move_pacman()
-
+        
     def set_next_direction(self, direction):
         self.next_direction = direction
 
@@ -136,12 +135,12 @@ class SuperPacmanState:
 
     def random_upgrade(self):
         pacman = self.pacman
+ 
         self.counter += 1
-
         if self.counter > 50:
             pacman.state = NormalPacmanState(self.pacman)
-
-
+       
+        
     def move_pacman(self):
         # TODO:
         #   - update the pacman's location with super speed
@@ -150,7 +149,6 @@ class SuperPacmanState:
         speed = 2 * PACMAN_SPEED
         pacman.x += (speed * DIR_OFFSET[pacman.direction][0])
         pacman.y += (speed * DIR_OFFSET[pacman.direction][1])
-
 
 if __name__ == "__main__":
     root = tk.Tk()
